@@ -98,7 +98,9 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public boolean deleteById(Long id) {
-        String deleteQuery = "DELETE FROM books WHERE id = ?";
+        String deleteQuery = "UPDATE books SET deleted = TRUE WHERE id = ?";
+        // Примітка: Я використав "UPDATE books SET deleted = TRUE..." для "м'якого видалення",
+        // оскільки це відповідає вашій логіці findAll(), де використовується WHERE deleted = FALSE
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
              PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
             deleteStatement.setLong(1, id);

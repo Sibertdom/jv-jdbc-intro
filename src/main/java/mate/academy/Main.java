@@ -11,7 +11,7 @@ public class Main {
     private static final Injector injector = Injector.getInstance("mate.academy");
 
     public static void main(String[] args) {
-        BookDao bookDao = (BookDao) injector.getInstance(BookDao.class);
+        final BookDao bookDao = (BookDao) injector.getInstance(BookDao.class);
 
         System.out.println("--- 1. CREATE ---");
         Book novel = new Book();
