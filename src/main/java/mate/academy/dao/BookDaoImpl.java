@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import mate.academy.exception.DataProcessingException;
 import mate.academy.lib.Dao;
 import mate.academy.model.Book;
@@ -38,7 +37,6 @@ public class BookDaoImpl implements BookDao {
             createStatement.setString(1, book.getTitle());
             createStatement.setBigDecimal(2, book.getPrice());
             createStatement.executeUpdate();
-
             ResultSet generatedKeys = createStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 book.setId(generatedKeys.getLong(1));
@@ -56,7 +54,6 @@ public class BookDaoImpl implements BookDao {
              PreparedStatement findStatement = connection.prepareStatement(selectQuery)) {
             findStatement.setLong(1, id);
             ResultSet resultSet = findStatement.executeQuery();
-
             if (resultSet.next()) {
                 return Optional.of(extractBookFromResultSet(resultSet));
             }
