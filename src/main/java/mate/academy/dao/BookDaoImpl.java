@@ -1,20 +1,24 @@
 package mate.academy.dao;
 
-import mate.academy.dao.BookDao;
-import mate.academy.model.Book;
-import mate.academy.exception.DataProcessingException;
-import mate.academy.lib.Dao;
-import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import mate.academy.exception.DataProcessingException;
+import mate.academy.lib.Dao;
+import mate.academy.model.Book;
 
 @Dao
 public class BookDaoImpl implements BookDao {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/book_store_db?serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/book_store_db"
+            + "?serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASSWORD = "123MySQL456;"; //
+    private static final String PASSWORD = "123MySQL456;";
 
     static {
         try {
@@ -30,7 +34,6 @@ public class BookDaoImpl implements BookDao {
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
              PreparedStatement createStatement = connection.prepareStatement(
                      insertQuery, Statement.RETURN_GENERATED_KEYS)) {
-
             createStatement.setString(1, book.getTitle());
             createStatement.setBigDecimal(2, book.getPrice());
             createStatement.executeUpdate();
@@ -50,7 +53,6 @@ public class BookDaoImpl implements BookDao {
         String selectQuery = "SELECT id, title, price FROM books WHERE id = ? AND deleted = FALSE";
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
              PreparedStatement findStatement = connection.prepareStatement(selectQuery)) {
-
             findStatement.setLong(1, id);
             ResultSet resultSet = findStatement.executeQuery();
 
@@ -69,7 +71,6 @@ public class BookDaoImpl implements BookDao {
         String selectQuery = "SELECT id, title, price FROM books WHERE deleted = FALSE";
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
              PreparedStatement findStatement = connection.prepareStatement(selectQuery)) {
-
             ResultSet resultSet = findStatement.executeQuery();
             while (resultSet.next()) {
                 allBooks.add(extractBookFromResultSet(resultSet));
@@ -85,7 +86,6 @@ public class BookDaoImpl implements BookDao {
         String updateQuery = "UPDATE books SET title = ?, price = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
              PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
-
             updateStatement.setString(1, book.getTitle());
             updateStatement.setBigDecimal(2, book.getPrice());
             updateStatement.setLong(3, book.getId());
@@ -101,7 +101,6 @@ public class BookDaoImpl implements BookDao {
         String deleteQuery = "DELETE FROM books WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
              PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
-
             deleteStatement.setLong(1, id);
             return deleteStatement.executeUpdate() > 0;
         } catch (SQLException e) {
