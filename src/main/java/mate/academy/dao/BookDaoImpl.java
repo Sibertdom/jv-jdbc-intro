@@ -33,7 +33,7 @@ public class BookDaoImpl implements BookDao {
         String insertQuery = "INSERT INTO books (title, price) VALUES (?, ?)";
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
                 PreparedStatement createStatement = connection.prepareStatement(
-                      insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+                        insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             createStatement.setString(1, book.getTitle());
             createStatement.setBigDecimal(2, book.getPrice());
             createStatement.executeUpdate();
